@@ -1,0 +1,14 @@
+name: dev-workspace-sample
+services:
+  playground:
+    container_name: 'devconteiner'
+    hostname: 'devconteiner'
+
+    build: .
+    restart: always
+    working_dir: '/workspace/'
+    tty: true
+    volumes:
+      - type: bind
+        source: ../
+        target: /workspace/

@@ -5,8 +5,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: next-app
-    container_name: next-app
+    image: node-devcontainer
+    container_name: node-devcontainer
     ports:
       - '3001:3001'
     env_file:

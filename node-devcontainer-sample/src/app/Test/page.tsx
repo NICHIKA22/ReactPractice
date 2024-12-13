@@ -1,8 +1,6 @@
 import Image from "next/image";
 import styles from "./page.module.css";
 import Link from "next/link";
-
-
 export default function Home() {
   return (
     <div className={styles.page}>
@@ -19,16 +17,12 @@ export default function Home() {
           <li>
             Get started by editing <code>src/app/page.tsx</code>. change from dev container
           </li>
-          <li>Save and see your changes instantly.</li>
-          <Link href={"/Test"}>Testに行くよ~</Link>
-          <br />
-          <Link href={"/State"}>Stateに行くよ~</Link>
-          <br />
-          <Link href={"/Restaurant"}>Server side Componentに行くよ~</Link>
+          <li>ここはTestです</li>
+          <Link href={"/"}>Homeに行くよ</Link>
+          
         </ol>
 
         <div className={styles.ctas}>
-
           <a
             className={styles.primary}
             href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

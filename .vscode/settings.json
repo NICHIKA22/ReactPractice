@@ -1,0 +1,4 @@
+{
+    "dev.containers.runPostCreateCommand": true,
+    "dev.containers.runPostStartCommand": true
+}

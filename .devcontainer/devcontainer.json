@@ -1,22 +1,23 @@
 // For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
 // https://github.com/microsoft/vscode-dev-containers/tree/v0.245.0/containers/typescript-node
 {
-  "name": "Node.js & TypeScript",
+  "name": "Next.js Development Container",
   "dockerComposeFile": "docker-compose.yml",
-  "service": "playground",
-  "workspaceFolder": "/workspace",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "forwardPorts": [3001],
   "customizations": {
-    "vscode": {
-      "extensions": [
-        "dbaeumer.vscode-eslint",
-        "ms-vscode.node-debug2"
-      ]
-    }
-  },
-  "remoteUser": "RemoteUser",
-  "features": {
-    "docker-in-docker": "latest",
-    "git": "latest",
-    "github-cli": "latest"
+      "vscode": {
+        "extensions": [
+          "dbaeumer.vscode-eslint",
+          "ms-vscode.node-debug2",
+          "ms-vscode.vscode-typescript-tslint-plugin"
+        ]
+      }
+    },
+  "postCreateCommand": "yarn install",
+  "remoteUser": "node",
+  "remoteEnv": {
+    "CHOKIDAR_USEPOLLING": "true"
   }
 }

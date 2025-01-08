@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
-import { userNameAtom } from './atom/userAtom';
+import { userNameAtom } from '../atom/userAtom';
 
-// MUIコンポーネントのインポート
+// MUI コンポーネントのインポート
 import {
   Box,
   Card,
@@ -17,86 +17,74 @@ import {
 } from '@mui/material';
 
 export default function Login() {
-  const [, setUserName] = useAtom(userNameAtom);
+  const [_, setUserName] = useAtom(userNameAtom);
   const [inputValue, setInputValue] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
 
   const handleLogin = () => {
-    if (!inputValue) {
-      setError('Please enter a username!');
+    if (!inputValue.trim()) {
+      setError('ユーザー名を入力してください。');
       return;
     }
     setError('');
-    setUserName(inputValue);
+    setUserName(inputValue.trim());
     router.push('/Home');
   };
 
   return (
     <Box
+      // 背景の青系グラデーション設定
       sx={{
+        background: 'linear-gradient(to right, #2196f3, #3f51b5)',
+        minHeight: '100vh',
         display: 'flex',
-        justifyContent: 'center',
         alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(to right, #2196f3, #673ab7)', // 背景の青と紫のグラデーション
+        justifyContent: 'center',
       }}
     >
       <Card
         sx={{
           width: 400,
-          padding: 3,
+          maxWidth: '90%',
           borderRadius: 2,
           boxShadow: 3,
         }}
       >
-        <CardContent>
+        <CardContent
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+          }}
+        >
           <Typography
             variant="h5"
             component="h1"
-            sx={{
-              textAlign: 'center',
-              fontWeight: 'bold',
-              color: 'gray',
-              marginBottom: 3,
-            }}
+            sx={{ textAlign: 'center', fontWeight: 'bold', color: 'gray' }}
           >
             Welcome to Jotai App
           </Typography>
 
-          {error && (
-            <Alert
-              severity="error"
-              sx={{
-                marginBottom: 2,
-              }}
-            >
-              {error}
-            </Alert>
-          )}
+          {error && <Alert severity="error">{error}</Alert>}
 
           <TextField
-            fullWidth
-            label="Enter your username"
+            label="ユーザー名"
             variant="outlined"
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
-            sx={{
-              marginBottom: 2,
-            }}
+            required
           />
 
           <Button
-            fullWidth
             variant="contained"
             color="primary"
             onClick={handleLogin}
             sx={{
               fontWeight: 'bold',
-              padding: 1.5,
             }}
           >
-            Log In
+            ログイン
           </Button>
         </CardContent>
       </Card>

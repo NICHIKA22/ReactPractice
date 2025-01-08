@@ -14,7 +14,7 @@ export default function TestPage() {
             setIsLoading(true);
             setTimeout(() => {
                 setIsLoading(false);
-            }, 2000); // 5秒後にLoadingを終了
+            }, 5000); // 5秒後にLoadingを終了
         }
     };
 
@@ -72,7 +72,7 @@ export default function TestPage() {
             <br />
 
             {/* Link to Home Page */}
-            <Link href={"/"}>
+            <Link href={"/Home"}>
                 <button
                     style={{
                         marginTop: "20px",

@@ -18,7 +18,7 @@ export default function Home() {
             Get started by editing <code>src/app/page.tsx</code>. change from dev container
           </li>
           <li>ここはTestです</li>
-          <Link href={"/"}>Homeに行くよ</Link>
+          <Link href={"/Home"}>Homeに行くよ</Link>
           
         </ol>
 

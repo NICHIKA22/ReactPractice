@@ -115,7 +115,7 @@ export default function Home() {
                 <CircularProgress
                   size={24}
                   sx={{
-                    color: "#ffffff",
+                    color: "#FF4500", // 朱色の設定
                     position: "absolute",
                   }}
                 />

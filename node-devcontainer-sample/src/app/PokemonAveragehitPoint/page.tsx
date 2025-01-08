@@ -1,78 +1,66 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import Link from "next/link";
+import React from "react";
 import { BarChart } from "@mui/x-charts";
+import { Box, Typography, Button, Card, CardContent } from "@mui/material";
+import Link from "next/link";
+import useFetchPokemonData from "../hooks/useFetchPokemonData";
 
-interface Pokemon {
-  id: number;
-  pokemon: string;
-  type: string;
-  hitpoints: number;
-}
-
-export default function PokemonBarChart() {
-  const [chartData, setChartData] = useState<{ xAxis: string[]; series: number[] }>({
-    xAxis: [],
-    series: [],
-  });
-
-  useEffect(() => {
-    // APIデータを取得
-    async function fetchData() {
-      try {
-        const response = await fetch("https://dummyapi.online/api/pokemon");
-        const data: Pokemon[] = await response.json();
-
-        // Typeごとにヒットポイントを集計
-        const typeMap: { [type: string]: { totalHp: number; count: number } } = {};
-        data.forEach((pokemon) => {
-          if (!typeMap[pokemon.type]) {
-            typeMap[pokemon.type] = { totalHp: 0, count: 0 };
-          }
-          typeMap[pokemon.type].totalHp += pokemon.hitpoints;
-          typeMap[pokemon.type].count += 1;
-        });
-
-        // 平均値を計算
-        const xAxis = Object.keys(typeMap);
-        const series = xAxis.map((type) => typeMap[type].totalHp / typeMap[type].count);
-
-        setChartData({ xAxis, series });
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    }
-
-    fetchData();
-  }, []);
+const PokemonBarChart = () => {
+  const { chartData, loading, error } = useFetchPokemonData("https://dummyapi.online/api/pokemon");
 
   return (
-    <div style={{ padding: "20px", textAlign: "center" }}>
-      <h2>Pokemon Hitpoint Averages by Type</h2>
-      {chartData.xAxis.length > 0 ? (
-        <BarChart
-          xAxis={[{ scaleType: "band", data: chartData.xAxis }]}
-          series={[{ data: chartData.series }]}
-          width={500}
-          height={300}
-        />
-      ) : (
-        <p>Loading data...</p>
-      )}
-              <Link href={"/Home"}>
-                <button
-                    style={{
-                        marginTop: "20px",
-                        padding: "10px 20px",
-                        fontSize: "16px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Homeに戻るよ
-                </button>
-            </Link>
-    </div>
-    
+    <Card
+      sx={{
+        backgroundColor: "#e3f2fd", // 青色基調の背景色
+        borderRadius: "10px",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+        maxWidth: "600px",
+        margin: "auto",
+        padding: "20px",
+        textAlign: "center",
+      }}
+    >
+      <CardContent>
+        <Typography variant="h5" gutterBottom sx={{ color: "#1565c0" }}>
+          Pokemon Hitpoint Averages by Type
+        </Typography>
+        {loading ? (
+          <Typography>Loading data...</Typography>
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <Box
+            sx={{
+              margin: "20px auto",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <BarChart
+              xAxis={[{ scaleType: "band", data: chartData.xAxis }]}
+              series={[{ data: chartData.series }]}
+              width={500}
+              height={300}
+            />
+          </Box>
+        )}
+        <Link href={"/Home"} passHref>
+          <Button
+            variant="contained"
+            color="primary"
+            sx={{
+              marginTop: "20px",
+              padding: "10px 20px",
+              fontSize: "16px",
+            }}
+          >
+            Homeに戻るよ
+          </Button>
+        </Link>
+      </CardContent>
+    </Card>
   );
-}
+};
+
+export default PokemonBarChart;

@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Pie } from "react-chartjs-2";
-import axios from "axios";
-import { Card, CardContent, Typography } from "@mui/material";
+import { Card, CardContent, Typography, Button } from "@mui/material";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -11,48 +10,13 @@ import {
   Legend,
 } from "chart.js";
 import Link from "next/link";
+import usePokemonTypeCounts from "../hooks/usePokemonTypeCounts";
 
 // Chart.js の設定
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-type Pokemon = {
-  id: number;
-  pokemon: string;
-  type: string;
-  abilities: string[];
-  hitpoints: number;
-  evolutions: string[];
-  location: string;
-  image_url: string;
-};
-
 const PokemonTypePieChart = () => {
-  const [typeCounts, setTypeCounts] = useState<Record<string, number>>({});
-
-  useEffect(() => {
-    const fetchPokemonData = async () => {
-      try {
-        const response = await axios.get<Pokemon[]>(
-          "https://dummyapi.online/api/pokemon"
-        );
-        const data = response.data;
-
-        const counts: Record<string, number> = {};
-        data.forEach((pokemon) => {
-          const types = pokemon.type.split("/");
-          types.forEach((type) => {
-            counts[type] = (counts[type] || 0) + 1;
-          });
-        });
-
-        setTypeCounts(counts);
-      } catch (error) {
-        console.error("Error fetching Pokemon data:", error);
-      }
-    };
-
-    fetchPokemonData();
-  }, []);
+  const { typeCounts, loading, error } = usePokemonTypeCounts("https://dummyapi.online/api/pokemon");
 
   const chartData = {
     labels: Object.keys(typeCounts),
@@ -75,29 +39,49 @@ const PokemonTypePieChart = () => {
   };
 
   return (
-    <Card>
+    <Card
+      sx={{
+        backgroundColor: "#e3f2fd", // 青色基調の背景色
+        borderRadius: "10px",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
+        maxWidth: "1000px",
+        margin: "auto",
+        padding: "20px",
+      }}
+    >
       <CardContent>
-        <Typography variant="h5" gutterBottom>
+        <Typography variant="h5" gutterBottom sx={{ color: "#1565c0" }}>
           Pokemon Type Distribution
         </Typography>
-        {Object.keys(typeCounts).length > 0 ? (
-          <Pie data={chartData} />
-        ) : (
+        {loading ? (
           <Typography>Loading...</Typography>
+        ) : error ? (
+          <Typography color="error">{error}</Typography>
+        ) : (
+          <div
+            style={{
+              width: "500px", // チャートの幅
+              height: "500px", // チャートの高さ
+              margin: "auto", // 中央に配置
+            }}
+          >
+            <Pie data={chartData} />
+          </div>
         )}
       </CardContent>
       <Link href={"/Home"}>
-                <button
-                    style={{
-                        marginTop: "20px",
-                        padding: "10px 20px",
-                        fontSize: "16px",
-                        cursor: "pointer",
-                    }}
-                >
-                    Homeに戻るよ
-                </button>
-            </Link>
+        <Button
+          variant="contained"
+          color="primary"
+          sx={{
+            marginTop: "20px",
+            padding: "10px 20px",
+            fontSize: "16px",
+          }}
+        >
+          Homeに戻るよ
+        </Button>
+      </Link>
     </Card>
   );
 };
